@@ -115,7 +115,9 @@ The game processes each frame by:
 - Buildings based on modernist architectural artwork (mentioned in group documentation)
 
 - The motivation to create an interactive game using p5.js was particularly influenced by seeing creative implementations like Suika Game on OpenProcessing. 
-![Clicking game](readmeimage/SuikaGame.png)[Suika Game](https://openprocessing.org/sketch/2084936) 
+![Clicking game](readmeimage/SuikaGame.png)
+
+  [Suika Game](https://openprocessing.org/sketch/2084936) 
 
   Seeing how others transformed the real game into p5.js coding world encouraged me to turn our architectural visualisation into an interactive experience.
 
