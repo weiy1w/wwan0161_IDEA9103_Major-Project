@@ -33,8 +33,8 @@ class ScoreDisplay {
     fill(0);
     textSize(24);
     textAlign(LEFT);
-    text(`Score: ${this.score}`, 20, 30);
-    text(`High Score: ${this.highScore}`, 20, 60);
+    text(`Score: ${this.score}`, 20, 80);
+    text(`High Score: ${this.highScore}`, 20, 120);
   }
   // Increment score and update high score if needed
   addScore() {
@@ -573,24 +573,25 @@ function draw() {
   fillColour("yellow");
   rect(0, height-rectHeight*2, width, rectHeight*2);
 
-
+  // Game UI
   if (gameActive) {
     scoreDisplay.show();
-    text(`Time: ${gameTimer}`, 20, 90);
+    text(`Time: ${gameTimer}`, 20, 160);
   } else {
 
     textAlign(CENTER);
     textSize(32);
     text(`Game Over!`, width/2, 120);
-
+    
     textAlign(LEFT);
     textSize(24);
     scoreDisplay.show();
-    text(`Click anywhere to start`, 20, 120);
+    text(`Click anywhere to start`, width - 300, 50);
   }
-    textAlign(RIGHT);
-    textSize(24);
-    text(`Find and click the blinking blocks to score!`, width - 40, 40);
+
+    textAlign(LEFT);
+    textSize(20);
+    text(`Find and click the blinking blocks to score!`, 20, 40);
   }
 
   
