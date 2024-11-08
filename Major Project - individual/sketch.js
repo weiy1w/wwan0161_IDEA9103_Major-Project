@@ -1,25 +1,34 @@
 // Global variables 
-let secondSegWidth; 
+// Scale and positioning variables for responsive design
+let secondSegWidth; // Width of each building section
 let minHeight;
-let maxHeight;
+let maxHeight; // Building height constraints
 let rectWidth;
-let rectHeight;
+let rectHeight; // Unit size for drawing rects
+
+// Colour palette for the buildings
 let red = [206, 29, 29];
 let blue = [21, 33, 173];
 let yellow = [255, 196, 31];
 
-let activeBlock = null;        
-let gameTimer = 30;     
-let gameActive = false; 
-let lastTime = 0;      
+// Game state variables
+let activeBlock = null; // Currently highlighted block     
+let gameTimer = 30; // Game duration in seconds    
+let gameActive = false; // Current game state 
+let lastTime = 0; // Time tracking for the game timer     
 
+// Score Management Class
+// ScoreDisplay class handles the scoring system and UI
+// This class organises score-related functionality in one place,
 // This class organise inspired by AI tool
+
 class ScoreDisplay {
   constructor() {
     this.score = 0;
     this.highScore = 0;
   }
 
+  // Display current score and high score
   show() {
     fill(0);
     textSize(24);
@@ -27,14 +36,14 @@ class ScoreDisplay {
     text(`Score: ${this.score}`, 20, 30);
     text(`High Score: ${this.highScore}`, 20, 60);
   }
-
+  // Increment score and update high score if needed
   addScore() {
     this.score++;
     if(this.score > this.highScore) {
       this.highScore = this.score;
     }
   }
-
+  // Reset score when starting a new game
   reset() {
     this.score = 0;
   }
@@ -80,6 +89,7 @@ function fillColour(colour) {
 // This allows all buildings to be handled in a unified coordinate system
 // for easier click detection and animation
 
+// Selects a random block from the building to highlight
 function selectNewActiveBlock() {
   const possibleBlocks = [
     // First Building (Not changed)
@@ -232,7 +242,35 @@ function selectNewActiveBlock() {
    console.log("Selected block:", activeBlock);
  }
 
- function startGame() {
+ // Draws a single rectangle with the specified properties
+// Handles coordinate conversion and active block highlighting
+
+function drawRect(x, y, w, h, c) {
+  // Convert grid coordinates to screen coordinates
+  let actualX = x * rectWidth;
+  let actualY = windowHeight - y * rectHeight;
+  let actualW = w * rectWidth;
+  let actualH = h * rectHeight;
+
+ // Check if this is the currently active block
+  let isActiveBlock = gameActive && activeBlock && 
+    x === activeBlock.x && 
+    y === activeBlock.y && 
+    w === activeBlock.w && 
+    h === activeBlock.h;
+
+ // Make active block blink 
+  if (isActiveBlock) {
+    let blink = frameCount % 20 < 10 ? 255 : 0;
+    fill(blink);
+  } else {
+    fillColour(c);
+  }
+  
+  rect(actualX, actualY, actualW, actualH);
+}
+
+function startGame() {
   gameActive = true;
   scoreDisplay.reset();
   gameTimer = 30;
@@ -244,28 +282,6 @@ function selectNewActiveBlock() {
 function endGame() {
   gameActive = false;
   activeBlock = null;
-}
-
-function drawRect(x, y, w, h, c) {
-  let actualX = x * rectWidth;
-  let actualY = windowHeight - y * rectHeight;
-  let actualW = w * rectWidth;
-  let actualH = h * rectHeight;
-
-  let isActiveBlock = gameActive && activeBlock && 
-    x === activeBlock.x && 
-    y === activeBlock.y && 
-    w === activeBlock.w && 
-    h === activeBlock.h;
-  
-  if (isActiveBlock) {
-    let blink = frameCount % 20 < 10 ? 255 : 0;
-    fill(blink);
-  } else {
-    fillColour(c);
-  }
-  
-  rect(actualX, actualY, actualW, actualH);
 }
 
 function drawFirstBuilding() {
@@ -534,7 +550,9 @@ function setup() {
 
 function draw() {
   background(220);
-  
+
+// Main game loop
+// Updates game state and draws all elements  
   if (gameActive) {
     let currentTime = millis();
     if (currentTime - lastTime >= 1000) {
@@ -560,19 +578,33 @@ function draw() {
     scoreDisplay.show();
     text(`Time: ${gameTimer}`, 20, 90);
   } else {
-    text(`Game Over!`, 20, 30);
+
+    textAlign(CENTER);
+    textSize(32);
+    text(`Game Over!`, width/2, 120);
+
+    textAlign(LEFT);
+    textSize(24);
     scoreDisplay.show();
     text(`Click anywhere to start`, 20, 120);
   }
-}
+    textAlign(RIGHT);
+    textSize(24);
+    text(`Find and click the blinking blocks to score!`, width - 40, 40);
+  }
+
   
-//This function writing supported by AI tool
+// This function writing supported by AI tool
+// Mouse interaction handling
+// Detects clicks on the active block with a certain tolerance
+
 function mousePressed() {
+  // Start game if not active
   if (!gameActive) {
     startGame();
     return;
   }
-  
+  // Check for clicks on active block
   if (activeBlock) {
     let actualX = activeBlock.x * rectWidth;
     let actualY = windowHeight - activeBlock.y * rectHeight;
