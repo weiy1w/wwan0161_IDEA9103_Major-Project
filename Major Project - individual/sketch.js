@@ -1,10 +1,5 @@
 // Global variables 
-let secondSegStart;
-let secondSegWidth;
-let thirdSegStart;
-let thirdSegWidth;
-let fourthSegStart;
-let fourthSegWidth;
+let secondSegWidth; 
 let minHeight;
 let maxHeight;
 let rectWidth;
@@ -13,13 +8,41 @@ let red = [206, 29, 29];
 let blue = [21, 33, 173];
 let yellow = [255, 196, 31];
 
-
-let activeBlock = null;  
-let score = 0;          
+let activeBlock = null;        
 let gameTimer = 30;     
 let gameActive = false; 
 let lastTime = 0;      
-let highScore = 0;     
+
+// This class organise inspired by AI tool
+class ScoreDisplay {
+  constructor() {
+    this.score = 0;
+    this.highScore = 0;
+  }
+
+  show() {
+    fill(0);
+    textSize(24);
+    textAlign(LEFT);
+    text(`Score: ${this.score}`, 20, 30);
+    text(`High Score: ${this.highScore}`, 20, 60);
+  }
+
+  addScore() {
+    this.score++;
+    if(this.score > this.highScore) {
+      this.highScore = this.score;
+    }
+  }
+
+  reset() {
+    this.score = 0;
+  }
+}
+
+let scoreDisplay = new ScoreDisplay();
+
+
 
 function getBlockId(x, y, w, h) {
   return `${x},${y},${w},${h}`;
@@ -99,7 +122,6 @@ function selectNewActiveBlock() {
     {x: 73, y: 20, w: 5, h: 7, c: "white"},
     {x: 64, y: 76, w: 6, h: 63, c: "white"},
     {x: 58, y: 72, w: 1.5, h: 60, c: "white"},
-    {x: 43, y: 1.5, w: 37, h: 1.5, c: "yellow"},
     {x: 40, y: 7, w: 25, h: 1, c: "yellow"},
     {x: 49, y: 13.5, w: 20, h: 2.5, c: "yellow"},
     {x: 41, y: 22, w: 16, h: 2, c: "yellow"},
@@ -163,7 +185,6 @@ function selectNewActiveBlock() {
      // Fourth Building (x + 120)
      {x: 122, y: 16, w: 12, h: 15, c: "red"},
      {x: 137, y: 14, w: 11, h: 13, c: "blue"},
-     {x: 128, y: 8, w: 18, h: 7, c: "white"},
      {x: 125, y: 6, w: 5, h: 5, c: "yellow"},
      {x: 142, y: 7, w: 2, h: 6, c: "red"},
      {x: 144, y: 9, w: 5, h: 8, c: "white"},
@@ -208,7 +229,22 @@ function selectNewActiveBlock() {
    ];
    
    activeBlock = possibleBlocks[floor(random(possibleBlocks.length))];
+   console.log("Selected block:", activeBlock);
  }
+
+ function startGame() {
+  gameActive = true;
+  scoreDisplay.reset();
+  gameTimer = 30;
+  lastTime = millis();
+  activeBlock = null;
+  selectNewActiveBlock();
+}
+
+function endGame() {
+  gameActive = false;
+  activeBlock = null;
+}
 
 function drawRect(x, y, w, h, c) {
   let actualX = x * rectWidth;
@@ -230,50 +266,6 @@ function drawRect(x, y, w, h, c) {
   }
   
   rect(actualX, actualY, actualW, actualH);
-}
-
-
-function startGame() {
-  console.log("Starting new game");
-  gameActive = true;
-  score = 0;
-  gameTimer = 30;
-  lastTime = millis();
-  activeBlock = null;
-  selectNewActiveBlock();
-}
-
-function endGame() {
-  gameActive = false;
-  highScore = max(score, highScore);
-  activeBlock = null;
-}
-
-//This function writing is supported by AI tool
-
-function mousePressed() {
-  if (!gameActive) {
-    startGame();
-    return;
-  }
-  
-  if (activeBlock) {
-    let actualX = activeBlock.x * rectWidth;
-    let actualY = windowHeight - activeBlock.y * rectHeight;
-    let actualW = activeBlock.w * rectWidth;
-    let actualH = activeBlock.h * rectHeight;
-    
-    let tolerance = 10;
-    
-    if (mouseX >= actualX - tolerance && 
-        mouseX <= actualX + actualW + tolerance &&
-        mouseY >= actualY - tolerance && 
-        mouseY <= actualY + actualH + tolerance) {
-
-      score++;
-      selectNewActiveBlock();
-    }
-  }
 }
 
 function drawFirstBuilding() {
@@ -563,25 +555,45 @@ function draw() {
   fillColour("yellow");
   rect(0, height-rectHeight*2, width, rectHeight*2);
 
-  
-  fill(0);
-  textSize(24);
-  textAlign(LEFT);
 
-
-  // This score part is inspired by AI tool
   if (gameActive) {
-    text(`Score: ${score}`, 20, 30);
-    text(`Time: ${gameTimer}`, 20, 60);
+    scoreDisplay.show();
+    text(`Time: ${gameTimer}`, 20, 90);
   } else {
-    text(`Game Over! Final Score: ${score}`, 20, 30);
-    text(`High Score: ${highScore}`, 20, 60);
-    text(`Click anywhere to start`, 20, 90);
+    text(`Game Over!`, 20, 30);
+    scoreDisplay.show();
+    text(`Click anywhere to start`, 20, 120);
   }
 }
+  
+//This function writing supported by AI tool
+function mousePressed() {
+  if (!gameActive) {
+    startGame();
+    return;
+  }
+  
+  if (activeBlock) {
+    let actualX = activeBlock.x * rectWidth;
+    let actualY = windowHeight - activeBlock.y * rectHeight;
+    let actualW = activeBlock.w * rectWidth;
+    let actualH = activeBlock.h * rectHeight;
+    
+    let tolerance = 8;
+    
+    if (mouseX >= actualX - tolerance && 
+        mouseX <= actualX + actualW + tolerance &&
+        mouseY >= actualY - tolerance && 
+        mouseY <= actualY + actualH + tolerance) {
 
-  function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
+      scoreDisplay.addScore();
+      selectNewActiveBlock();
+    }
+  }
+}
+  
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
     
     secondSegWidth = windowWidth/4;
     minHeight = windowHeight/4;
