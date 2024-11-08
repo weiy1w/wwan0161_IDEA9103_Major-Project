@@ -114,6 +114,10 @@ The game processes each frame by:
 ### Design Inspiration
 - Buildings based on modernist architectural artwork (mentioned in group documentation)
 
-- Game mechanics inspired by classic click-based gamesThe game's design draws inspiration from several sources. The core gameplay mechanic was inspired by the from p5.js's official examples, which demonstrates how simple click interactions can create engaging gameplay.![Clicking game](readmeimage/微信图片_20241108190910.png)[*Circle Clicker](https://p5js.org/examples/games-circle-clicker/)
+- The motivation to create an interactive game using p5.js was particularly influenced by seeing creative implementations like Suika Game on OpenProcessing. ![Clicking game](readmeimage/SuikaGame.png)[Suika Game](https://openprocessing.org/sketch/2084936) 
+
+  Seeing how others transformed the real game into p5.js coding world encouraged me to turn our architectural visualisation into an interactive experience.
+
+- Game mechanics inspired by classic click-based games. The game's design draws inspiration from several sources. The core gameplay mechanic was inspired by the from p5.js's official examples, which demonstrates how simple click interactions can create engaging gameplay.![Clicking game](readmeimage/微信图片_20241108190910.png)[Circle Clicker](https://p5js.org/examples/games-circle-clicker/)
 
   Similar to aim trainer applications used in FPS (First Person Shooter) games, this project helps players develop their clicking precision and reaction time. By incorporating these elements into an architectural visualisation, the game creates a unique blend of precision training and artistic interaction.
