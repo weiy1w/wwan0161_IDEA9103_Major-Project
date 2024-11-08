@@ -34,7 +34,7 @@ This is a clicking game based on our group abstract building structures.
 
 ## Individual Animation Approach
 ### Unique Animation Approach
-I chose user input as my animation method. While my groupmates explored various animation methods (time-based construction, Perlin noise movement, and button-triggered animations), I focused on creating an interactive game element through:
+I chose user input as my animation method. While other group members explored various animation methods (time-based construction, Perlin noise movement, and button-triggered sound animations), I focused on creating an interactive game element through:
 
 - Random block highlighting system
 - User-driven click interaction
